@@ -1,0 +1,12 @@
+.DS_Store
+.Rproj.user
+*.Rproj
+.Rhistory
+.RData
+.Ruserdata
+_targets/
+in/
+out/
+tmp/
+july/
+src/scratch.R
