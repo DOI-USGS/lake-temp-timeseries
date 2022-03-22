@@ -6,7 +6,7 @@
 .Ruserdata
 _targets/
 in/
-out/
-tmp/
-july/
+out/*.png
+out/*.gif
+tmp/*.png
 src/scratch.R
