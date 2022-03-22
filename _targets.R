@@ -5,6 +5,7 @@ library(sf)
 library(lubridate)
 library(maps)
 library(showtext)
+library(magick)
 
 options(tidyverse.quiet = TRUE)
 
@@ -59,7 +60,8 @@ list(
     combine_animation_frames_gif(
       out_file = 'out/lake_temp_2020.gif',
       frame_delay_cs = 14, 
-      frame_rate = 50
-    )
+      frame_rate = 60
+    ),
+    format = "file"
   )
 )
