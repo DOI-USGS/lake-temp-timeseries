@@ -1,5 +1,5 @@
 # lake-temp-timeseries
-A gif of surface temperatures for 185,549 lakes. For this pipeline to work you must download all files from https://doi.org/10.5066/P9CEMS0M and place in a subdirectory, `in/`. 
+A gif of surface temperatures for 185,549 lakes using data from [Willard et al. 2022](https://aslopubs.onlinelibrary.wiley.com/doi/10.1002/lol2.10249). The [data are sourced from ScienceBase](https://doi.org/10.5066/P9CEMS0M) using the [`sbtools`](https://github.com/USGS-R/sbtools) package for R, and placed in a subdirectory, `in/`. 
 
 
 ## Build the gif

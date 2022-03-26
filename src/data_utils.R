@@ -1,3 +1,20 @@
+download_sb_files <- function(sb_id, file_string, dest_folder) {
+  
+  sb_filenames <- item_list_files(sb_id)
+  sb_files <- sb_filenames %>% filter(str_detect(fname, file_string))
+  local_files <- file.path(dest_folder, sb_files$fname)
+  
+  if(any(!file.exists(local_files))){
+    item_file_download(
+      sb_id, 
+      names = sb_files$fname, 
+      destinations = local_files,
+      overwrite_file = FALSE)
+  }
+  
+  return(local_files)
+  
+}
 get_daily_temp <- function(date, lake_files){
   
   # predicted temp for all lakes at once

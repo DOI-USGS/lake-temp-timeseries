@@ -21,15 +21,15 @@ proj <- '+proj=lcc +lat_1=30.7 +lat_2=29.3 +lat_0=28.5 +lon_0=-91.33333333333333
 list(
   # this assumes you downloaded all files from https://doi.org/10.5066/P9CEMS0M 
   tar_target(
+    lake_files,
+    download_sb_files(sb_id = "60341c3ed34eb12031172aa6", 
+                      file_string = "predicted_temp", 
+                      dest_folder = "in")
+  ),
+  tar_target(
     all_metadata, 
     read_csv(file.path('in/lake_metadata.csv'))
     ),
-  tar_target(
-    lake_files, # CONUS is chunked
-    all_metadata %>% 
-      mutate(filepath = file.path(sprintf("in/%s_predicted_temp_%s.nc", group_id, group_bbox))) %>%
-      pull(filepath) %>% unique()
-  ),
   tar_target(
     date_list, 
     seq.Date(
