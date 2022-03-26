@@ -27,10 +27,6 @@ list(
                       dest_folder = "in")
   ),
   tar_target(
-    all_metadata, 
-    read_csv(file.path('in/lake_metadata.csv'))
-    ),
-  tar_target(
     date_list, 
     seq.Date(
       as.Date(sprintf('%s-%s', year_start, day_start)), 
