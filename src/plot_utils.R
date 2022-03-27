@@ -79,14 +79,8 @@ resize_frames <- function(frames, scale_width, scale_percent = NULL, dir_out) {
   
   return(png_names)
 
-  #  image_animate(
-    #    delay = frame_delay_cs,
-    #    optimize = TRUE,
-    #    fps = frame_rate
-    #  ) %>%
-    #  image_write(out_file)
 }
-animate_frames_gif <- function(frames, out_file, frame_delay_cs, frame_rate){
+animate_frames_gif <- function(frames, out_file, reduce = TRUE, frame_delay_cs, frame_rate){
   frames %>%
     image_read() %>%
     image_join() %>%
@@ -96,11 +90,18 @@ animate_frames_gif <- function(frames, out_file, frame_delay_cs, frame_rate){
       fps = frame_rate
     ) %>%
     image_write(out_file)
+  
+  if(reduce == TRUE){
+    optimize_gif(out_file, frame_delay_cs)
+  }
+  
+  return(out_file)
+  
 }
-optimize_gif <- function(frames, frames_dir, out_file, frame_delay_cs, frame_rate) {
+optimize_gif <- function(out_file, frame_delay_cs) {
 
   # simplify the gif with gifsicle - cuts size by about 2/3
-  gifsicle_command <- sprintf('gifsicle -b -O3 -d %s %s',
+  gifsicle_command <- sprintf('gifsicle -b -O3 -d %s --colors 256 %s',
                               frame_delay_cs, out_file)
   system(gifsicle_command)
   

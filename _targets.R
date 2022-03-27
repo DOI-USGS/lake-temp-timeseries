@@ -70,6 +70,7 @@ list(
     animate_frames_gif(
       frames = scaled_pngs,
       out_file = 'out/lake_temp_2020.gif',
+      reduce = TRUE,
       frame_delay_cs = 10,
       frame_rate = 60
     ),
