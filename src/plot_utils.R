@@ -57,45 +57,6 @@ plot_lake_temp <- function(temp_data, time, usa_sf, file_out, pal){
   ggsave(file_out, width = 10*dpi, height = 7.15*dpi, units = 'px', dpi = dpi)
 }
 
-plot_lake_temp_all <- function(temp_data, date_list, usa_sf, file_out, pal){
-  plot_data <- test_data$temp
-  plot_data  
-  
-  ggplot() +
-    geom_sf(data = usa_sf,
-            fill = "white",
-            color = "grey" 
-    ) +
-    geom_sf(data = temp_data, 
-            size = 0.2, 
-            aes(color = surftemp)
-    ) + 
-    scale_color_viridis_c(
-      option = pal,
-      limits = c(0, 35),
-      "Degrees (C)"
-    ) +
-    theme_lakes()  +
-    coord_sf(label_axes = list(bottom = "E", right = "N")) +
-    ggtitle("Surface temperatures for 185,549 lakes",
-            subtitle = sprintf("%s", time)) +
-    guides(color = guide_colorbar(
-      direction = "horizontal",
-      barwidth = 14, 
-      barheight =  0.8,
-      label.position = "bottom",
-      title.position = "top",
-      title.theme = element_text(family = "Source Sans Pro", 
-                                 #face = "bold", 
-                                 size = 20, 
-                                 lineheight = 0.7
-      )
-    ))
-  
-  dpi <- 90
-  ggsave(file_out, width = 10*dpi, height = 7.15*dpi, units = 'px', dpi = dpi)
-}
-
 combine_animation_frames_gif <- function(out_file, frame_delay_cs, frame_rate) {
   # modified from https://github.com/USGS-VIZLAB/gage-conditions-gif/blob/main/6_visualize/src/combine_animation_frames.R
   
