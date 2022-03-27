@@ -78,9 +78,7 @@ resize_frames <- function(frames, scale_width, scale_percent = NULL, dir_out) {
   map2(as.list(frames_scaled), png_names, ~image_write(.x, .y))
   
   return(png_names)
-  
-  ## ideally each frame is under 400 KB
-  
+
   #  image_animate(
     #    delay = frame_delay_cs,
     #    optimize = TRUE,
@@ -88,21 +86,19 @@ resize_frames <- function(frames, scale_width, scale_percent = NULL, dir_out) {
     #  ) %>%
     #  image_write(out_file)
 }
-combine_animation_frames_gif <- function(frames, frames_dir, out_file, frame_delay_cs, frame_rate) {
-  # modified from https://github.com/USGS-VIZLAB/gage-conditions-gif/blob/main/6_visualize/src/combine_animation_frames.R
-  #png_files <- list.files(frames_dir, pattern = "*.png", full.names = TRUE)
-  png_str <- paste(frames, collapse=' ')
+animate_frames_gif <- function(frames, out_file, frame_delay_cs, frame_rate){
+  frames %>%
+    image_read() %>%
+    image_join() %>%
+    image_animate(
+      delay = frame_delay_cs,
+      optimize = TRUE,
+      fps = frame_rate
+    ) %>%
+    image_write(out_file)
+}
+optimize_gif <- function(frames, frames_dir, out_file, frame_delay_cs, frame_rate) {
 
-  # create gif using magick
-  magick_command <- sprintf(
-    'convert -define registry:temporary-path=%s -limit memory 24GiB -delay %d -loop 0 %s %s',
-    frames_dir, frame_delay_cs, png_str, out_file)
-  if(Sys.info()[['sysname']] == "Windows") {
-    magick_command <- sprintf('magick %s', magick_command)
-  }
-  system(magick_command)
-
-  
   # simplify the gif with gifsicle - cuts size by about 2/3
   gifsicle_command <- sprintf('gifsicle -b -O3 -d %s %s',
                               frame_delay_cs, out_file)

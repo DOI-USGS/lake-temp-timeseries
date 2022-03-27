@@ -66,14 +66,13 @@ list(
     format = 'file'
   ),
   tar_target(
-    lake_temp_2020_gif, # animate frames
-    combine_animation_frames_gif(
+    lake_temp_2020_gif,
+    animate_frames_gif(
       frames = scaled_pngs,
-      frames_dir = 'tmp/scaled',
-      out_file = 'out/lake_temp_2020_scaled.gif',
-      frame_delay_cs = 14, 
+      out_file = 'out/lake_temp_2020.gif',
+      frame_delay_cs = 10,
       frame_rate = 60
     ),
-    format = "file"
+    format = 'file'
   )
 )
