@@ -3,4 +3,6 @@ A gif of surface temperatures for 185,549 lakes using data from [Willard et al. 
 
 
 ## Build the gif
-This gif is created using a pipeline with the `targets` library for R. To run the pipeline run `tar_make()` in the console. The final gif is created using system calls to [`magick`](https://imagemagick.org/index.php) and [`gifsicle`](https://www.lcdf.org/gifsicle/), and will require that they are installed on your computer to work.
+This gif is created using a pipeline with the `targets` library for R. It takes approximately 3 hours to build the gif.
+
+To run the pipeline run `tar_make()` in the console. The final gif is created using system calls to [`magick`](https://imagemagick.org/index.php) and [`gifsicle`](https://www.lcdf.org/gifsicle/), and will require that they are installed on your computer to work.
