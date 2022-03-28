@@ -56,37 +56,52 @@ plot_lake_temp <- function(temp_data, time, usa_sf, file_out, pal){
   dpi <- 90
   ggsave(file_out, width = 10*dpi, height = 7.15*dpi, units = 'px', dpi = dpi)
 }
-
-combine_animation_frames_gif <- function(out_file, frame_delay_cs, frame_rate) {
-  # modified from https://github.com/USGS-VIZLAB/gage-conditions-gif/blob/main/6_visualize/src/combine_animation_frames.R
+resize_frames <- function(frames, scale_width, scale_percent = NULL, dir_out) {
   
-  #build gif from pngs with magick and simplify with gifsicle
-  #note that this will use all frames in tmp
-  png_files <- list.files('out', pattern = "*.png", full.names = TRUE)
-  png_files <- png_files[seq(1, length(png_files), by = 2)]
-  tmp_dir <- 'tmp/magick'
-  if(!dir.exists(tmp_dir)) dir.create(tmp_dir)
+  if(!dir.exists(dir_out)) dir.create(dir_out)
   
-  # Resize to more reasonable resolutions for a gif
-  file.copy(from = png_files, to = tmp_dir)
-  moved_pngs <- gsub('out', tmp_dir, png_files)
-  lapply(moved_pngs, function(fn) {
-    system(sprintf('magick convert %s -resize 800x572 %s', fn, fn))
-  })
+  frames_in <- frames %>%
+    image_read() %>%
+    image_join()
+  info <- image_info(frames_in)
   
-  png_str <- paste(moved_pngs, collapse=' ')
-  # create gif using magick
-  magick_command <- sprintf(
-    'convert -define registry:temporary-path=%s -limit memory 24GiB -delay %d -loop 0 %s %s',
-    tmp_dir, frame_delay_cs, png_str, out_file)
-  if(Sys.info()[['sysname']] == "Windows") {
-    magick_command <- sprintf('magick %s', magick_command)
+  # scale png frames proportionally 
+  # either based on a percentage of current size or width
+  if(!is.null(scale_percent)){
+    scale_width <- info$width*(scale_percent/100)
   }
-  system(magick_command)
-
   
+  frames_scaled <- frames_in %>%
+    image_scale(scale_width) 
+  
+  png_names <-  sprintf('%s/%s', dir_out, gsub('out/', '', frames)) 
+  map2(as.list(frames_scaled), png_names, ~image_write(.x, .y))
+  
+  return(png_names)
+
+}
+animate_frames_gif <- function(frames, out_file, reduce = TRUE, frame_delay_cs, frame_rate){
+  frames %>%
+    image_read() %>%
+    image_join() %>%
+    image_animate(
+      delay = frame_delay_cs,
+      optimize = TRUE,
+      fps = frame_rate
+    ) %>%
+    image_write(out_file)
+  
+  if(reduce == TRUE){
+    optimize_gif(out_file, frame_delay_cs)
+  }
+  
+  return(out_file)
+  
+}
+optimize_gif <- function(out_file, frame_delay_cs) {
+
   # simplify the gif with gifsicle - cuts size by about 2/3
-  gifsicle_command <- sprintf('gifsicle -b -O3 -d %s %s',
+  gifsicle_command <- sprintf('gifsicle -b -O3 -d %s --colors 256 %s',
                               frame_delay_cs, out_file)
   system(gifsicle_command)
   

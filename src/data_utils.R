@@ -35,6 +35,7 @@ get_temp_data <- function(date_list, lake_files){
     lake_data <- ncvar_get(nc, 'surftemp', 
                            start = c(first(time_idx), 1), 
                            count = c(last(time_idx) - first(time_idx) + 1, -1))
+    nc_close(nc)
  
     tibble(
       site_id = lake_id,
