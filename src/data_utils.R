@@ -1,5 +1,7 @@
 download_sb_files <- function(sb_id, file_string, dest_folder) {
   
+  if(!dir.exists(dest_folder)) dir.create(dest_folder)
+  
   sb_filenames <- item_list_files(sb_id)
   sb_files <- sb_filenames %>% filter(str_detect(fname, file_string))
   local_files <- file.path(dest_folder, sb_files$fname)
