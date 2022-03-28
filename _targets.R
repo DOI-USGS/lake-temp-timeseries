@@ -28,7 +28,7 @@ list(
     format = "file"
   ),
   tar_target(
-    date_list, 
+    date_df, 
     tibble(date = seq.Date(
       as.Date(sprintf('%s-%s', year_start, day_start)), 
       as.Date(sprintf('%s-%s', year_end, day_end)), by = "days"),
@@ -36,12 +36,12 @@ list(
   ),
   tar_target(
     temp_data, # pulls all data at once, may want to split if > 1 yr
-    get_temp_data(date_list$date, lake_files)
+    get_temp_data(date_df$date, lake_files)
   ),
   tar_target(
     temp_daily, # split data by date
-    get_daily_temps(temp_data, date_list, proj),
-    pattern = map(date_list)
+    get_daily_temps(temp_data, date_df, proj),
+    pattern = map(date_df)
   ),
   tar_target(
     usa_sf, 
@@ -50,11 +50,11 @@ list(
   tar_target(
     lake_temp_pngs, # create frames
     plot_lake_temp(temp_daily, 
-                   time = date_list$date,
+                   time = date_df$date,
                    usa_sf,
-                   file_out = sprintf('out/lake_temp_%s.png', date_list$order),
+                   file_out = sprintf('out/lake_temp_%s.png', date_df$order),
                    pal = "mako"),
-    pattern = map(temp_daily, date_list),
+    pattern = map(temp_daily, date_df),
     format = "file"
   ),
   tar_target(
